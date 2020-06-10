@@ -49,9 +49,20 @@ def get_foregrounds(shape, wcs, seed = 1, foreground_types: dict = {}):
 
 def get_point_sources(shape, wcs, number, amplitude):
 
+    PSMap = np.zeros(shape)
+    i = 0.
+    while (i < number):
+        pix_x = int(shape[0]*np.random.rand())
+        pix_y = int(shape[1]*np.random.rand()) 
+        PSMap[pix_x, pix_y] += np.random.poisson(amplitude)
+        i = i + 1
+        
+    #r = np.random.poisson(amplitude, PSMap.size)
+    mappa = PSMap
+
     result = enmap.empty(shape, wcs)
     poisson = np.random.poisson(number, size = result.size)
     mappa = np.reshape(poisson, shape)
     
-    return 0
+    return enmap.enmap(mappa, wcs)
 
